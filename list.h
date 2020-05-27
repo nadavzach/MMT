@@ -5,12 +5,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct List_* PList;
+typedef struct List_* pList;
 typedef void* PElem;
+typedef enum {  Fail , Success } Status;
 
+// constructor
+pList ListCreate(/*pointers to all functions*/);
+
+//destroyer
+
+void ListDestroy(pList List);
 
 /*User functions*/
 
-/*Interface functions*/
+typedef int (*ListRemove)(PElem);
+typedef void * (*ListRemove)(PElem);
 
+
+
+/*Interface functions*/
+Status ListAdd(pList List , Node node);
 #endif
