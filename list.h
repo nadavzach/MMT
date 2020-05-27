@@ -18,8 +18,11 @@ void ListDestroy(pList List);
 
 /*User functions*/
 
-typedef int (*ListRemove)(PElem);
-typedef void * (*ListRemove)(PElem);
+typedef PElem (*CLONE_ELEM)(PElem);
+typedef void (*REMOVE_ELEM)(PElem);
+typedef BOOL (*COMPARE_ELEM)(PElem, PElem);
+typedef void (*PRINT_ELEM)(PElem);
+
 
 
 

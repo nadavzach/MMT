@@ -15,14 +15,19 @@ typedef struct node {
 typedef struct List_ {
     node* pHead;
     node* Node_Iterator;
-    // User Functions that we need to add
 
+    // functions recived from the user
+
+    CLONE_ELEM cloneElem;
+    REMOVE_ELEM removeElem;
+    COMPARE_ELEM compareElem;
+    PRINT_ELEM printElem;
 } List;
 
 
-pList ListCreate(/*pointers to all functions*/) {
-    /*if (pointers to all functions== NULL) // any of the arguments is null return null
-        return NULL;*/
+pList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pCompareElem, PRINT_ELEM pPrintElem) {
+    if (pCloneElem == NULL || pRemoveElem == NULL || pCompareElem == NULL || pPrintElem == NULL ) // any of the arguments is null return null
+        return NULL;
     pList pNewlist;
     pNewlist = (pList)malloc(sizeof(List));
     node* pNewHead = (node*)malloc(sizeof(Node));
@@ -31,11 +36,16 @@ pList ListCreate(/*pointers to all functions*/) {
         free(pNewHead);
         return NULL;//$$we need to check what to do if this happens (maybe exit(-1)??)
     }
-    pNewHead->element = NULL; //initiaing element to NULL
+    pNewHead->element = NULL; //initiating element to NULL
     pNewHead->next = NULL;
-    //saving pointers to database
+    //saving pointers to first node
     pNewlist->pHead = pNewHead;
-    pNewlist->Cur_Node = pNewHead;
+    pNewlist->Node_Iterator = pNewHead;
+    //inserting user funcs to the list
+    pNewlist->cloneElem = pCloneElem;
+    pNewlist->removeElem = pRemoveElem ;
+    pNewlist->compareElem = pCompareElem;
+    pNewlist->printElem = pPrintElem;
     return pNewlist;
 }
 
@@ -48,46 +58,53 @@ void ListDestroy(pList List) {
 
         pCurNode = List->pHead;
         List->pHead = List->pHead->next;
+        list->removeElem(pCurNode->element);
         free(pCurNode);
     }
     free(List);
 }
 
-Status ListAdd(pList List , node* node)
+Status ListAdd(pList List , PElem newElem)
 {
-    if (List == NULL || node == NULL )
-        return FAIL;
+    if (List == NULL || newElem == NULL )
+        return Fail;
 
     node* pNewNode = (node*)malloc(sizeof(Node));
     if(pNewNode == NULL)
-        return FAIL;
+        return Fail;
+    pNewNode->element = newElem;//adding the new element to the new node
 
-    pNewNode->element = node->element;
+
     node* Cur_Node = List->pHead;
     while(Cur_Node->next != Null)
-        node* Cur_Node = Cur_Node->next;
+         Cur_Node = Cur_Node->next;
     List->Cur_Node->next = pNewNode;
 
 }
 
-Status ListRemove(pList List , node* node)
+Status ListRemove(pList List , PElem elem_to_rem)
 {
-    if (List == NULL || node == NULL )
-        return FAIL;
+    if (List == NULL || elem_to_rem == NULL )
+        return Fail;
 
-
+    node* Node_to_remove;
     node* Cur_Node = List->pHead;
-    if (Cur_Node == node )
+    if (list->compareElem(Cur_Node->element, elem_to_rem) )
+    {
         List->pHead = List->pHead->next;
+        Node_to_remove = Cur_node;
+    }
     else
     {
-        while(Cur_Node->next != node)
+        while(!(list->compareElem(Cur_Node->next->element, elem_to_rem)))
             node* Cur_Node = Cur_Node->next;
-        if(Cur_Node == NULL )				//if the func didnt find the recived node, it returns FAIL
-            return FAIL;
-        List->Cur_Node->next = node->next;
+        if(Cur_Node == NULL )				//if the func didnt find the recived node, it returns Fail
+            return Fail;
+        Node_to_remove = Cur_Node->next;
+        Cur_Node->next = Cur_Node->next->next;
     }
-    free(node);
+    list->removeElem(Node_to_remove->next->element);
+    free(Node_to_remove);
     return Success
 }
 
@@ -97,12 +114,12 @@ node* ListGetFirst(pList List)
         exit(-1);//$$ check if we should exit.
 
     List->Node_Iterator=List->pHead;
-    return List->pHead;
+    return List->pHead->element;
 }
 
 node* ListGetNext(pList List)
 {
-    if (List == NULL  )
+    if (List == NULL)
         exit(-1);//$$ check if we should exit.
 
     if(List->Node_Iterator->next == NULL)	// iterator is in the end of the list.
@@ -110,7 +127,7 @@ node* ListGetNext(pList List)
 
     node* return_node = List->Node_Iterator;
     List->Node_Iterator=List->Node_Iterator->next;
-    return return_node;
+    return return_node->element;
 }
 
 bool ListCompare(pList list_1, pList list_2)
@@ -123,7 +140,7 @@ bool ListCompare(pList list_1, pList list_2)
 
     while(cur_node_1 != NULL || cur_node_2 != NULL )
     {
-        if( cur_node_1->element != cur_node_2->element)
+        if( list->compareElem(cur_node_1->element, cur_node_2->element)
             return false;
         cur_node_1=cur_node_1->next;
         cur_node_2=cur_node_2->next;
@@ -139,8 +156,11 @@ void ListPrint(pList List)
     printf("[");
     node* cur_node = List->pHead;
     while(cur_node != NULL)
-        printf("
-
+    {
+        list->printElem(cur_node->element);
+        cur_node = cur_node->next;
+    }
+    printf("]\n");
 
 }
 
