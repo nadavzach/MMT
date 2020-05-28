@@ -1,4 +1,3 @@
-
 //#ifndef MMT_HMW3_LIST_H
 //#define MMT_HMW3_LIST_H
 
@@ -13,13 +12,13 @@
 typedef struct List_* PList;
 typedef struct node* pNode;
 typedef void* PElem;
-typedef enum {  Fail , Success } Status;
+typedef enum { Fail, Success } Status;
 
 /*User functions*/
 
-typedef PElem (*CLONE_ELEM)(PElem);
+typedef PElem(*CLONE_ELEM)(PElem);
 typedef void (*REMOVE_ELEM)(PElem);
-typedef BOOL (*COMPARE_ELEM)(PElem, PElem);
+typedef BOOL(*COMPARE_ELEM)(PElem, PElem);
 typedef void (*PRINT_ELEM)(PElem);
 
 
@@ -32,8 +31,8 @@ void ListDestroy(PList List);
 
 
 /*Interface functions*/
-Status ListAdd(PList List , PElem newElem);
-Status ListRemove(PList List , PElem elem_to_rem);
+Status ListAdd(PList List, PElem newElem);
+Status ListRemove(PList List, PElem elem_to_rem);
 pNode ListGetFirst(PList List);
 pNode ListGetNext(PList List);
 BOOL ListCompare(PList list_1, PList list_2);

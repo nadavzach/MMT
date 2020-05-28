@@ -8,7 +8,7 @@
 #include "list.h"
 
 typedef struct node {
-     pNode next;
+    pNode next;
     PElem element;
 } Node;
 
@@ -30,17 +30,13 @@ PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pC
         return NULL;
     PList pNewlist;
     pNewlist = (PList)malloc(sizeof(List));
-    pNode pNewHead = (pNode)malloc(sizeof(Node));
-    if (pNewlist == NULL || pNewHead == NULL) {
+    if (pNewlist == NULL ) {
         free(pNewlist);
-        free(pNewHead);
         return NULL;//$$we need to check what to do if this happens (maybe exit(-1)??)
     }
-    pNewHead->element = NULL; //initiating element to NULL
-    pNewHead->next = NULL;
     //saving pointers to first node
-    pNewlist->pHead = pNewHead;
-    pNewlist->Node_Iterator = pNewHead;
+    pNewlist->pHead = NULL;
+    pNewlist->Node_Iterator = NULL;
     //inserting user funcs to the list
     pNewlist->cloneElem = pCloneElem;
     pNewlist->removeElem = pRemoveElem ;
@@ -70,16 +66,30 @@ Status ListAdd (PList List , PElem newElem)
         return Fail;
 
     pNode pNewNode = (pNode)malloc(sizeof(Node));
-    if(pNewNode == NULL)
+
+
+
+    if (pNewNode == NULL)
         return Fail;
+    pNewNode->next = NULL;
     pNewNode->element = List->cloneElem(newElem);//adding the new element to the new node
 
+    if(pNewNode->element==NULL)
+        return FAIL;
+
+    if (List->pHead == NULL)//if the list is empty the func inserts the new elem' to the head.
+    {
+        List->Node_Iterator = pNewNode;
+        List->pHead = pNewNode;
+        return Success;
+    }
 
     pNode Cur_Node = List->pHead;
-    while(Cur_Node->next != NULL)
+    while (Cur_Node->next != NULL)
         Cur_Node = Cur_Node->next;
-    List->Node_Iterator->next = pNewNode;
 
+    Cur_Node->next = pNewNode;
+    return Success;
 }
 
 Status ListRemove(PList List , PElem elem_to_rem)
@@ -96,14 +106,20 @@ Status ListRemove(PList List , PElem elem_to_rem)
     }
     else
     {
-        while(!(List->compareElem(Cur_Node->next->element, elem_to_rem)))
-             Cur_Node = Cur_Node->next;
-        if(Cur_Node == NULL )				//if the func didnt find the recived node, it returns Fail
+
+        while(Cur_Node->next != NULL)
+        {
+            if(List->compareElem(Cur_Node->next->element, elem_to_rem))
+                break;
+            Cur_Node = Cur_Node->next;
+        }
+        if(Cur_Node->next == NULL)
             return Fail;
+
         Node_to_remove = Cur_Node->next;
         Cur_Node->next = Cur_Node->next->next;
     }
-    List->removeElem(Node_to_remove->next->element);
+    List->removeElem(Node_to_remove->element);
     free(Node_to_remove);
     return Success;
 }
@@ -153,8 +169,10 @@ BOOL ListCompare(PList list_1, PList list_2)
 
 void ListPrint(PList List)
 {
+    pNode cur_node = NULL;
+
     printf("[");
-    pNode cur_node = List->pHead;
+    cur_node = List->pHead;
     while(cur_node != NULL)
     {
         List->printElem(cur_node->element);
@@ -163,30 +181,3 @@ void ListPrint(PList List)
     printf("]\n");
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
