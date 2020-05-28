@@ -18,10 +18,24 @@ PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
     new_student = (PStudent)malloc(sizeof(Student));
     if (new_student == NULL)
         return NULL;//$$check if that what we should do here
+    //inserting integers.
     new_student->age = Age;
-    new_student->faculty = faculty;
     new_student->ID = ID;
-    new_student->name = Name;
+
+    //mallocing and cpying strings
+    if(NULL==(new_student->faculty = (char*)malloc(sizeof(strlen(faculty)+1)))) {
+        free(new_student);
+        return NULL;
+    }
+    strcpy(new_student->faculty , faculty);
+
+    if(NULL==(new_student->name = (char*)malloc(sizeof(strlen(Name)+1))))
+    {
+        free(new_student->faculty);
+        free(new_student);
+        return NULL;
+    }
+    strcpy(new_student->name , Name);
     return new_student;
 }
 
@@ -30,7 +44,7 @@ void printStudent(PStudent pstudent)
 {
 
     printf("Name: %s, Age: %d, ID: %d, Faculty: %s \n", pstudent->name,
-        pstudent->age, pstudent->ID, pstudent->faculty);
+           pstudent->age, pstudent->ID, pstudent->faculty);
 
 }
 
@@ -47,14 +61,30 @@ PStudent cloneStudent(PStudent pstudent)
     newstudent = (PStudent)malloc(sizeof(Student));
     if (newstudent == NULL)
         return NULL;
+
+    //inserting integers
     newstudent->age = pstudent->age;
-    newstudent->faculty = pstudent->faculty;
     newstudent->ID = pstudent->ID;
-    newstudent->name = pstudent->name;
+
+    //mallocing and copying strings
+    if(NULL==(newstudent->faculty = (char*)malloc(sizeof(strlen(pstudent->faculty)+1)))) {
+        free(newstudent);
+        return NULL;
+    }
+    strcpy(newstudent->faculty , pstudent->faculty);
+
+    if(NULL==(newstudent->name = (char*)malloc(sizeof(strlen(pstudent->name)+1)))) {
+        free(newstudent->faculty);
+        free(newstudent);
+        return NULL;
+    }
+    strcpy(newstudent->name , pstudent->name);
     return newstudent;
 }
 
 void destroyStudent(PStudent pstudent)
 {
+    free(pstudent->name);
+    free(pstudent->faculty);
     free(pstudent);
 }

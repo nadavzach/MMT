@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 #include "list.h"
 
 typedef struct node {
-     pNode next;
+    pNode next;
     PElem element;
 } Node;
 
@@ -64,25 +64,32 @@ Status ListAdd (PList List , PElem newElem)
 {
     if (List == NULL || newElem == NULL )
         return Fail;
-    
+
     pNode pNewNode = (pNode)malloc(sizeof(Node));
+
+
+
     if (pNewNode == NULL)
         return Fail;
     pNewNode->next = NULL;
     pNewNode->element = List->cloneElem(newElem);//adding the new element to the new node
-    if (List->pHead == NULL)
+
+    if(pNewNode->element==NULL)
+        return FAIL;
+
+    if (List->pHead == NULL)//if the list is empty the func inserts the new elem' to the head.
     {
         List->Node_Iterator = pNewNode;
         List->pHead = pNewNode;
-        return SUCCESS;
-    }  
+        return Success;
+    }
+
     pNode Cur_Node = List->pHead;
     while (Cur_Node->next != NULL)
         Cur_Node = Cur_Node->next;
+
     Cur_Node->next = pNewNode;
-    List->printElem(Cur_Node->element);
-    List->printElem(pNewNode->element);
-    return SUCCESS;
+    return Success;
 }
 
 Status ListRemove(PList List , PElem elem_to_rem)
@@ -99,14 +106,20 @@ Status ListRemove(PList List , PElem elem_to_rem)
     }
     else
     {
-        while(!(List->compareElem(Cur_Node->next->element, elem_to_rem)))
-             Cur_Node = Cur_Node->next;
-        if(Cur_Node == NULL )				//if the func didnt find the recived node, it returns Fail
+
+        while(Cur_Node->next != NULL)
+        {
+            if(List->compareElem(Cur_Node->next->element, elem_to_rem))
+                break;
+            Cur_Node = Cur_Node->next;
+        }
+        if(Cur_Node->next == NULL)
             return Fail;
+
         Node_to_remove = Cur_Node->next;
         Cur_Node->next = Cur_Node->next->next;
     }
-    List->removeElem(Node_to_remove->next->element);
+    List->removeElem(Node_to_remove->element);
     free(Node_to_remove);
     return Success;
 }
@@ -156,8 +169,10 @@ BOOL ListCompare(PList list_1, PList list_2)
 
 void ListPrint(PList List)
 {
+    pNode cur_node = NULL;
+
     printf("[");
-    pNode cur_node = List->pHead;
+    cur_node = List->pHead;
     while(cur_node != NULL)
     {
         List->printElem(cur_node->element);
