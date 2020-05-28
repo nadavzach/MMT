@@ -29,8 +29,8 @@ PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
 void printStudent(PStudent pstudent)
 {
 
-    printf("Name: %s, Age: %d, ID: %d, Faculty: %s \n" , pstudent->name,
-           pstudent->age, pstudent->ID, pstudent->faculty );
+    printf("Name: %s, Age: %d, ID: %d, Faculty: %s \n", pstudent->name,
+        pstudent->age, pstudent->ID, pstudent->faculty);
 
 }
 

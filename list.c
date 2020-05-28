@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,17 +30,13 @@ PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pC
         return NULL;
     PList pNewlist;
     pNewlist = (PList)malloc(sizeof(List));
-    pNode pNewHead = (pNode)malloc(sizeof(Node));
-    if (pNewlist == NULL || pNewHead == NULL) {
+    if (pNewlist == NULL ) {
         free(pNewlist);
-        free(pNewHead);
         return NULL;//$$we need to check what to do if this happens (maybe exit(-1)??)
     }
-    pNewHead->element = NULL; //initiating element to NULL
-    pNewHead->next = NULL;
     //saving pointers to first node
-    pNewlist->pHead = pNewHead;
-    pNewlist->Node_Iterator = pNewHead;
+    pNewlist->pHead = NULL;
+    pNewlist->Node_Iterator = NULL;
     //inserting user funcs to the list
     pNewlist->cloneElem = pCloneElem;
     pNewlist->removeElem = pRemoveElem ;
@@ -68,18 +64,25 @@ Status ListAdd (PList List , PElem newElem)
 {
     if (List == NULL || newElem == NULL )
         return Fail;
-
+    
     pNode pNewNode = (pNode)malloc(sizeof(Node));
-    if(pNewNode == NULL)
+    if (pNewNode == NULL)
         return Fail;
+    pNewNode->next = NULL;
     pNewNode->element = List->cloneElem(newElem);//adding the new element to the new node
-
-
+    if (List->pHead == NULL)
+    {
+        List->Node_Iterator = pNewNode;
+        List->pHead = pNewNode;
+        return SUCCESS;
+    }  
     pNode Cur_Node = List->pHead;
-    while(Cur_Node->next != NULL)
+    while (Cur_Node->next != NULL)
         Cur_Node = Cur_Node->next;
-    List->Node_Iterator->next = pNewNode;
-
+    Cur_Node->next = pNewNode;
+    List->printElem(Cur_Node->element);
+    List->printElem(pNewNode->element);
+    return SUCCESS;
 }
 
 Status ListRemove(PList List , PElem elem_to_rem)
@@ -163,30 +166,3 @@ void ListPrint(PList List)
     printf("]\n");
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
