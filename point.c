@@ -20,23 +20,23 @@ PPoint PointCreate(int newDim_num)
     //inserting integers.
     newPoint->dim_num = newDim_num;
     newPoint->cur_dim_num = 0;
-    newPoint->coordinateList = ListCreate(cloneCoordinate,destroyCoordinate,compareCoordinates, printCoordinate );
+    newPoint->coordinateList = ListCreate(cloneCoordinate, destroyCoordinate, compareCoordinates, printCoordinate);
 
     return newPoint;
 }
 
 void PointDestroy(PPoint Point)
 {
-   ListDestroy(Point->coordinateList);
-   free((Point));
+    ListDestroy(Point->coordinateList);
+    free((Point));
 }
 
-Result PointAddCoordinate(PPoint Point,int newCord)
+Result PointAddCoordinate(PPoint Point, int newCord)
 {
-    if(Point->cur_dim_num < Point->dim_num)//check if theres less cors than the dimention
+    if (Point->cur_dim_num < Point->dim_num)//check if theres less cors than the dimention
     {
-        int *pCord;
-        if (!(pCord = (int *) malloc(sizeof(int))))
+        int* pCord;
+        if (!(pCord = (int*)malloc(sizeof(int))))
             return FAIL;
         *pCord = newCord;
         if (!ListAdd(Point->coordinateList, pCord)) {
@@ -55,30 +55,30 @@ int PointGetFirstCoordinate(PPoint point)
     if (point->cur_dim_num == 0)
         return 0;//$$??
     int* retPointer = (int*)ListGetFirst(point->coordinateList);
-    if(retPointer)
-     return *(retPointer);
+    if (retPointer)
+        return *(retPointer);
     return 0;
 
 }
 
 int PointGetNextCoordinate(PPoint point)
 {
-    int* retPointer=(int*)ListGetNext(point->coordinateList);
-    if(retPointer)
+    int* retPointer = (int*)ListGetNext(point->coordinateList);
+    if (retPointer)
         return *(retPointer);
     return 0;
 }
 
 void PointPrint(PPoint point)
 {
-    printf("Point Dimension: %d, Size: %d, Coordinates: ",point->dim_num,point->cur_dim_num);
+    printf("Point Dimension: %d, Size: %d, Coordinates: ", point->dim_num, point->cur_dim_num);
     ListPrint(point->coordinateList);
 }
 
- /* ----------------------Functions for list ---------------------*/
+/* ----------------------Functions for list ---------------------*/
 void printCoordinate(int* coordinate)
 {
-    printf("%d ",*coordinate);
+    printf("%d ", *coordinate);
 
 }
 
@@ -116,37 +116,56 @@ PPoint ClonePoint(PPoint point)
     PPoint newPoint = PointCreate(point->dim_num);
 
     Cord = PointGetFirstCoordinate(point);
-    if(Cord == 0)//0 is the return value from getfirst if there's no coordinates
+    if (Cord == 0)//0 is the return value from getfirst if there's no coordinates
         return newPoint; //empty point
-    PointAddCoordinate(newPoint,Cord);
-    while (Cord!=0)
+    PointAddCoordinate(newPoint, Cord);
+    while (Cord != 0)
     {
         Cord = PointGetNextCoordinate(point);
-        if(Cord != 0)
-            PointAddCoordinate(newPoint,Cord);
+        if (Cord != 0)
+            PointAddCoordinate(newPoint, Cord);
     }
     return newPoint;
 }
 BOOL ComparePoints(PPoint point1, PPoint point2)
 {
-    if( (point1->dim_num != point2->dim_num) || (point1->cur_dim_num != point2->cur_dim_num) )
+    if ((point1->dim_num != point2->dim_num) || (point1->cur_dim_num != point2->cur_dim_num))
         return  FALSE;
-    if(ListCompare(point1->coordinateList,point2->coordinateList))
+    if (ListCompare(point1->coordinateList, point2->coordinateList))
         return TRUE;
     return  FALSE;
 }
 
 int PointGetDim(PPoint point)
 {
-    if(!point)
+    if (!point)
         return 0;
     else
         return point->dim_num;
 }
+
 int PointGetCurDim(PPoint point)
 {
-    if(!point)
+    if (!point)
         return 0;
     else
         return point->cur_dim_num;
+}
+
+int GetPointsDis(PPoint point1, PPoint point2)
+{
+    if (point1->cur_dim_num != point2->cur_dim_num)
+        return -1;
+    int* dis;
+    dis = (int*)malloc(sizeof(int));
+    if (dis == NULL)
+        return NULL;
+    int* Cod1 = (int*)ListGetFirst(point1->coordinateList);
+    int* Cod2 = (int*)ListGetFirst(point1->coordinateList);
+
+    for (int i = 0; i < point1->cur_dim_num; i++)
+    {
+        dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
+    }
+    return *dis;
 }

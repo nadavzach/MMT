@@ -6,12 +6,13 @@ typedef struct Point_* PPoint;
 
 PPoint PointCreate(int newDim_num);
 void PointDestroy(PPoint Point);
-Result PointAddCoordinate(PPoint Point,int newCord);
+Result PointAddCoordinate(PPoint Point, int newCord);
 int PointGetNextCoordinate(PPoint point);
 int PointGetFirstCoordinate(PPoint point);
 void PointPrint(PPoint point);
 int PointGetDim(PPoint point);
 int PointGetCurDim(PPoint point);
+int GetPointsDis(PPoint point1, PPoint point2);
 
 /*----------------Interface functions-----------------------------*/
 

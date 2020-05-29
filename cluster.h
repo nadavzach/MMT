@@ -6,7 +6,7 @@
 typedef struct Cluster_* PCluster;
 
 /*Interface functions*/
-void ClusterDestroy( PCluster cluster);
+void ClusterDestroy(PCluster cluster);
 PCluster ClusterCreate(int newDim);
 Result ClusterAddPoint(PCluster cluster, PPoint point);
 int ClusterGetMinDistance(PCluster cluster);

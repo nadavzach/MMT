@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,11 +26,11 @@ typedef struct List_ {
 
 
 PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pCompareElem, PRINT_ELEM pPrintElem) {
-    if (pCloneElem == NULL || pRemoveElem == NULL || pCompareElem == NULL || pPrintElem == NULL ) // any of the arguments is NULL return NULL
+    if (pCloneElem == NULL || pRemoveElem == NULL || pCompareElem == NULL || pPrintElem == NULL) // any of the arguments is NULL return NULL
         return NULL;
     PList pNewlist;
     pNewlist = (PList)malloc(sizeof(List));
-    if (pNewlist == NULL ) {
+    if (pNewlist == NULL) {
         free(pNewlist);
         return NULL;//$$we need to check what to do if this happens (maybe exit(-1)??)
     }
@@ -39,7 +39,7 @@ PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pC
     pNewlist->Node_Iterator = NULL;
     //inserting user funcs to the list
     pNewlist->cloneElem = pCloneElem;
-    pNewlist->removeElem = pRemoveElem ;
+    pNewlist->removeElem = pRemoveElem;
     pNewlist->compareElem = pCompareElem;
     pNewlist->printElem = pPrintElem;
     return pNewlist;
@@ -48,7 +48,7 @@ PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pC
 void ListDestroy(PList List) {
     if (List == NULL) // checking for input
         return;
-    Node * pCurNode;
+    Node* pCurNode;
     while (List->pHead)
     {
 
@@ -60,9 +60,9 @@ void ListDestroy(PList List) {
     free(List);
 }
 
-Result ListAdd (PList List , PElem newElem)
+Result ListAdd(PList List, PElem newElem)
 {
-    if (List == NULL || newElem == NULL )
+    if (List == NULL || newElem == NULL)
         return FAIL;
 
     pNode pNewNode = (pNode)malloc(sizeof(Node));
@@ -74,7 +74,7 @@ Result ListAdd (PList List , PElem newElem)
     pNewNode->next = NULL;
     pNewNode->element = List->cloneElem(newElem);//adding the new element to the new node
 
-    if(pNewNode->element==NULL)
+    if (pNewNode->element == NULL)
         return FAIL;
 
     if (List->pHead == NULL)//if the list is empty the func inserts the new elem' to the head.
@@ -92,14 +92,14 @@ Result ListAdd (PList List , PElem newElem)
     return SUCCESS;
 }
 
-Result ListRemove(PList List , PElem elem_to_rem)
+Result ListRemove(PList List, PElem elem_to_rem)
 {
-    if (List == NULL || elem_to_rem == NULL )
+    if (List == NULL || elem_to_rem == NULL)
         return FAIL;
 
     pNode Node_to_remove;
     pNode Cur_Node = List->pHead;
-    if (List->compareElem(Cur_Node->element, elem_to_rem) )
+    if (List->compareElem(Cur_Node->element, elem_to_rem))
     {
         List->pHead = List->pHead->next;
         Node_to_remove = Cur_Node;
@@ -107,13 +107,13 @@ Result ListRemove(PList List , PElem elem_to_rem)
     else
     {
 
-        while(Cur_Node->next != NULL)
+        while (Cur_Node->next != NULL)
         {
-            if(List->compareElem(Cur_Node->next->element, elem_to_rem))
+            if (List->compareElem(Cur_Node->next->element, elem_to_rem))
                 break;
             Cur_Node = Cur_Node->next;
         }
-        if(Cur_Node->next == NULL)
+        if (Cur_Node->next == NULL)
             return FAIL;
 
         Node_to_remove = Cur_Node->next;
@@ -126,10 +126,10 @@ Result ListRemove(PList List , PElem elem_to_rem)
 
 PElem ListGetFirst(PList List)
 {
-    if (List == NULL  )
+    if (List == NULL)
         exit(-1);//$$ check if we should exit.
 
-    List->Node_Iterator=List->pHead;
+    List->Node_Iterator = List->pHead;
     return List->pHead->element;
 }
 
@@ -138,30 +138,30 @@ PElem ListGetNext(PList List)
     if (List == NULL)
         exit(-1);//$$ check if we should exit.
 
-    if(List->Node_Iterator->next == NULL)	// iterator is in the end of the list.
+    if (List->Node_Iterator->next == NULL)	// iterator is in the end of the list.
         return NULL;
 
-    List->Node_Iterator=List->Node_Iterator->next;
+    List->Node_Iterator = List->Node_Iterator->next;
 
     return List->Node_Iterator->element;
 }
 
 BOOL ListCompare(PList list_1, PList list_2)
 {
-    if (list_1 == NULL || list_2 == NULL )
+    if (list_1 == NULL || list_2 == NULL)
         exit(-1);//$$ check what should we do (this ir return false).
 
     pNode cur_node_1 = list_1->pHead;
     pNode cur_node_2 = list_2->pHead;
 
-    while(cur_node_1 != NULL || cur_node_2 != NULL )
+    while (cur_node_1 != NULL || cur_node_2 != NULL)
     {
-        if( list_1->compareElem(cur_node_1->element, cur_node_2->element))
+        if (list_1->compareElem(cur_node_1->element, cur_node_2->element))
             return false;
-        cur_node_1=cur_node_1->next;
-        cur_node_2=cur_node_2->next;
+        cur_node_1 = cur_node_1->next;
+        cur_node_2 = cur_node_2->next;
     }
-    if(cur_node_1 == NULL && cur_node_2 == NULL)
+    if (cur_node_1 == NULL && cur_node_2 == NULL)
         return true;
     return false;
 }
@@ -173,7 +173,7 @@ void ListPrint(PList List)
 
     printf("[");
     cur_node = List->pHead;
-    while(cur_node != NULL)
+    while (cur_node != NULL)
     {
         List->printElem(cur_node->element);
         cur_node = cur_node->next;
