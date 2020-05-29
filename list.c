@@ -60,17 +60,17 @@ void ListDestroy(PList List) {
     free(List);
 }
 
-Status ListAdd (PList List , PElem newElem)
+Result ListAdd (PList List , PElem newElem)
 {
     if (List == NULL || newElem == NULL )
-        return Fail;
+        return FAIL;
 
     pNode pNewNode = (pNode)malloc(sizeof(Node));
 
 
 
     if (pNewNode == NULL)
-        return Fail;
+        return FAIL;
     pNewNode->next = NULL;
     pNewNode->element = List->cloneElem(newElem);//adding the new element to the new node
 
@@ -81,7 +81,7 @@ Status ListAdd (PList List , PElem newElem)
     {
         List->Node_Iterator = pNewNode;
         List->pHead = pNewNode;
-        return Success;
+        return SUCCESS;
     }
 
     pNode Cur_Node = List->pHead;
@@ -89,13 +89,13 @@ Status ListAdd (PList List , PElem newElem)
         Cur_Node = Cur_Node->next;
 
     Cur_Node->next = pNewNode;
-    return Success;
+    return SUCCESS;
 }
 
-Status ListRemove(PList List , PElem elem_to_rem)
+Result ListRemove(PList List , PElem elem_to_rem)
 {
     if (List == NULL || elem_to_rem == NULL )
-        return Fail;
+        return FAIL;
 
     pNode Node_to_remove;
     pNode Cur_Node = List->pHead;
@@ -114,17 +114,17 @@ Status ListRemove(PList List , PElem elem_to_rem)
             Cur_Node = Cur_Node->next;
         }
         if(Cur_Node->next == NULL)
-            return Fail;
+            return FAIL;
 
         Node_to_remove = Cur_Node->next;
         Cur_Node->next = Cur_Node->next->next;
     }
     List->removeElem(Node_to_remove->element);
     free(Node_to_remove);
-    return Success;
+    return SUCCESS;
 }
 
-pNode ListGetFirst(PList List)
+PElem ListGetFirst(PList List)
 {
     if (List == NULL  )
         exit(-1);//$$ check if we should exit.
@@ -133,7 +133,7 @@ pNode ListGetFirst(PList List)
     return List->pHead->element;
 }
 
-pNode ListGetNext(PList List)
+PElem ListGetNext(PList List)
 {
     if (List == NULL)
         exit(-1);//$$ check if we should exit.
