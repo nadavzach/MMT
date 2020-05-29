@@ -141,9 +141,9 @@ PElem ListGetNext(PList List)
     if(List->Node_Iterator->next == NULL)	// iterator is in the end of the list.
         return NULL;
 
-    pNode return_node = List->Node_Iterator;
     List->Node_Iterator=List->Node_Iterator->next;
-    return return_node->element;
+
+    return List->Node_Iterator->element;
 }
 
 BOOL ListCompare(PList list_1, PList list_2)

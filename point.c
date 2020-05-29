@@ -34,10 +34,16 @@ void PointDestroy(PPoint Point)
 
 Result PointAddCoordinate(PPoint Point,int newCord)
 {
-    int* pCord = (int*)malloc(sizeof(int));
-    *pCord = newCord;
-    if(!ListAdd(Point,newCord))
+    int* pCord;
+    if(!(pCord= (int*)malloc(sizeof(int))))
         return FAIL;
+    *pCord = newCord;
+    if(!ListAdd(Point->coordinateList,pCord)) {
+        free(pCord);
+        return FAIL;
+    }
+    free(pCord);
+    (Point->cur_dim_num)++;
     return SUCCESS;
 }
 
@@ -64,7 +70,7 @@ void PointPrint(PPoint point)
  /*      Functions for list        */
 void printCoordinate(int* coordinate)
 {
-    printf("%d",*coordinate);
+    printf("%d ",*coordinate);
 
 }
 
