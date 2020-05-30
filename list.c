@@ -156,7 +156,7 @@ BOOL ListCompare(PList list_1, PList list_2)
 
     while (cur_node_1 != NULL || cur_node_2 != NULL)
     {
-        if (list_1->compareElem(cur_node_1->element, cur_node_2->element))
+        if (!(list_1->compareElem(cur_node_1->element, cur_node_2->element)))
             return false;
         cur_node_1 = cur_node_1->next;
         cur_node_2 = cur_node_2->next;
@@ -180,4 +180,11 @@ void ListPrint(PList List)
     }
     printf("]\n");
 
+}
+Result ListisEmpty(PList List)
+{
+    if (List->pHead == NULL)
+        return SUCCESS;
+    return FAIL;
+        
 }

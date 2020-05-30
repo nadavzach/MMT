@@ -32,4 +32,5 @@ PElem ListGetFirst(PList List);
 PElem ListGetNext(PList List);
 BOOL ListCompare(PList list_1, PList list_2);
 void ListPrint(PList List);
+Result ListisEmpty(PList List);
 #endif

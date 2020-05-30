@@ -53,11 +53,11 @@ Result PointAddCoordinate(PPoint Point, int newCord)
 int PointGetFirstCoordinate(PPoint point)
 {
     if (point->cur_dim_num == 0)
-        return 0;//$$??
+        return 10000;//$$??
     int* retPointer = (int*)ListGetFirst(point->coordinateList);
     if (retPointer)
         return *(retPointer);
-    return 0;
+    return 10000;
 
 }
 
@@ -66,7 +66,7 @@ int PointGetNextCoordinate(PPoint point)
     int* retPointer = (int*)ListGetNext(point->coordinateList);
     if (retPointer)
         return *(retPointer);
-    return 0;
+    return 10000;
 }
 
 void PointPrint(PPoint point)
@@ -116,13 +116,13 @@ PPoint ClonePoint(PPoint point)
     PPoint newPoint = PointCreate(point->dim_num);
 
     Cord = PointGetFirstCoordinate(point);
-    if (Cord == 0)//0 is the return value from getfirst if there's no coordinates
+    if (Cord == 10000)//10000 is the return value from getfirst if there's no coordinates
         return newPoint; //empty point
     PointAddCoordinate(newPoint, Cord);
-    while (Cord != 0)
+    while (Cord != 10000)
     {
         Cord = PointGetNextCoordinate(point);
-        if (Cord != 0)
+        if (Cord != 10000)
             PointAddCoordinate(newPoint, Cord);
     }
     return newPoint;
@@ -154,18 +154,21 @@ int PointGetCurDim(PPoint point)
 
 int GetPointsDis(PPoint point1, PPoint point2)
 {
-    if (point1->cur_dim_num != point2->cur_dim_num)
+    if (point1->dim_num != point2->dim_num)
         return -1;
     int* dis;
     dis = (int*)malloc(sizeof(int));
     if (dis == NULL)
         return NULL;
-    int* Cod1 = (int*)ListGetFirst(point1->coordinateList);
-    int* Cod2 = (int*)ListGetFirst(point1->coordinateList);
+    *dis = 0;
+    int *Cod1 = ListGetFirst(point1->coordinateList);
+    int *Cod2 = ListGetFirst(point2->coordinateList);
 
-    for (int i = 0; i < point1->cur_dim_num; i++)
+    while(Cod1)
     {
-        dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
+        *dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + *dis;
+        Cod1 = ListGetNext(point1->coordinateList);
+        Cod2 = ListGetNext(point2->coordinateList);
     }
     return *dis;
 }
