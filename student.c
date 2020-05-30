@@ -41,27 +41,29 @@ PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
 }
 
 
-void printStudent(PStudent pstudent)
+void printStudent(PElem elem)
 {
-
-    printf("Name: %s, Age: %d, ID: %d, Faculty: %s \n", pstudent->name,
+    PStudent pstudent = (PStudent) elem;
+    printf("Name: %s, Age: %d, ID: %d, Faculty: %s\n", pstudent->name,
         pstudent->age, pstudent->ID, pstudent->faculty);
-
 }
 
-BOOL compareStudents(PStudent pstudent1, PStudent pstudent2)
+BOOL compareStudents(PElem elem1, PElem elem2)
 {
+    PStudent pstudent1 = (PStudent)elem1;
+    PStudent pstudent2 = (PStudent)elem2;
     if (pstudent1->ID == pstudent2->ID)
         return true;
     return false;
 }
 
-PStudent cloneStudent(PStudent pstudent)
+PElem cloneStudent(PElem elem)
 {
     PStudent newstudent;
     newstudent = (PStudent)malloc(sizeof(Student));
     if (newstudent == NULL)
         return NULL;
+    PStudent pstudent = (PStudent)elem;
 
     //inserting integers
     newstudent->age = pstudent->age;
@@ -83,9 +85,10 @@ PStudent cloneStudent(PStudent pstudent)
     return newstudent;
 }
 
-void destroyStudent(PStudent pstudent)
+void destroyStudent(PElem elem)
 {
-    // free(pstudent->name);
-    // free(pstudent->faculty);
+    PStudent pstudent = (PStudent)elem;
+    //free(pstudent->name);
+    //free(pstudent->faculty);
     free(pstudent);
 }

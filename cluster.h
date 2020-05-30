@@ -9,7 +9,7 @@ typedef struct Cluster_* PCluster;
 void ClusterDestroy(PCluster cluster);
 PCluster ClusterCreate(int newDim);
 Result ClusterAddPoint(PCluster cluster, PPoint point);
-int ClusterGetMinDistance(PCluster cluster);
+int ClusterGetMinDistance(PCluster cluster, PPoint point);
 void ClusterPrint(PCluster cluster);
 
 

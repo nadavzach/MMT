@@ -21,7 +21,7 @@ PCluster ClusterCreate(int newDim)
     //inserting integers.
     newCluster->Cluster_dim = newDim;
     newCluster->pointList = ListCreate(ClonePoint, PointDestroy, ComparePoints, PointPrint);
-    newCluster->minDistance = -1;
+    newCluster->minDistance = 10000; // initiating starter distance
 
     return newCluster;
 }
@@ -37,14 +37,17 @@ Result ClusterAddPoint(PCluster cluster, PPoint point)
     if (PointGetDim(point) != cluster->Cluster_dim)
         return FAIL;
     /*-------checking if the point exists---------*/
-    PPoint curPoint = ListGetFirst(cluster->pointList);
-    while (curPoint)
+    if (!ListisEmpty(cluster->pointList))
     {
-        if (ComparePoints(point, curPoint))
-            return FAIL;
-        curPoint = ListGetNext(cluster->pointList);
+        PPoint curPoint = ListGetFirst(cluster->pointList);
+        while (curPoint)
+        {
+            if (ComparePoints(point, curPoint))
+                return FAIL;
+            curPoint = ListGetNext(cluster->pointList);
+        }
+        cluster->minDistance = ClusterGetMinDistance(cluster, point);
     }
-    cluster->minDistance = ClusterGetMinDistance(cluster, point);
     ListAdd(cluster->pointList, ClonePoint(point));
     return SUCCESS;
 }
@@ -53,17 +56,19 @@ int ClusterGetMinDistance(PCluster cluster, PPoint point)
 {
     PPoint curPoint = ListGetFirst(cluster->pointList);
     if (curPoint == NULL)// there arent any points to compare with yet
-        return -1;
+        return 10000;
     int curmindis = cluster->minDistance;
     int* MinDis;
     MinDis = (int*)malloc(sizeof(int));
     while (curPoint)
     {
         *MinDis = GetPointsDis(point, curPoint);
-        if ((cluster->minDistance) == -1) // for the first point inside
+        if ((cluster->minDistance) == 10000) // for the first point inside
             return *MinDis;
         if (*MinDis < curmindis) // updateing min sum
             curmindis = *MinDis;
+        curPoint = ListGetNext(cluster->pointList);
+
     }
     *MinDis = curmindis;
     return *MinDis;
@@ -74,6 +79,4 @@ void ClusterPrint(PCluster cluster)
     printf("Cluster's dimension: %d\n", cluster->Cluster_dim);
     ListPrint(cluster->pointList);
     printf("Minimum Square Distance: %d\n", cluster->minDistance);
-
-
 }

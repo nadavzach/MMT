@@ -99,7 +99,7 @@ Result ListRemove(PList List, PElem elem_to_rem)
 
     pNode Node_to_remove;
     pNode Cur_Node = List->pHead;
-    if (List->compareElem(Cur_Node->element, elem_to_rem))
+    if (List->compareElem(Cur_Node->element, elem_to_rem)) // first elemt is the element to remove
     {
         List->pHead = List->pHead->next;
         Node_to_remove = Cur_Node;

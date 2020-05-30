@@ -25,8 +25,9 @@ PPoint PointCreate(int newDim_num)
     return newPoint;
 }
 
-void PointDestroy(PPoint Point)
+void PointDestroy(PElem elem)
 {
+    PPoint Point = (PPoint)elem;
     ListDestroy(Point->coordinateList);
     free((Point));
 }
@@ -69,28 +70,33 @@ int PointGetNextCoordinate(PPoint point)
     return 10000;
 }
 
-void PointPrint(PPoint point)
+void PointPrint(PElem elem)
 {
+    PPoint point = (PPoint)elem;
     printf("Point Dimension: %d, Size: %d, Coordinates: ", point->dim_num, point->cur_dim_num);
     ListPrint(point->coordinateList);
 }
 
 /* ----------------------Functions for list ---------------------*/
-void printCoordinate(int* coordinate)
+void printCoordinate(PElem elem)
 {
+    int* coordinate = (int*)elem;
     printf("%d ", *coordinate);
 
 }
 
-BOOL compareCoordinates(int* coordinate1, int* coordinate2)
+BOOL compareCoordinates(PElem elem1, PElem elem2)
 {
+    int* coordinate1 = (int*)elem1;
+    int* coordinate2 = (int*)elem2;
     if (*coordinate1 == *coordinate2)
         return true;
     return false;
 }
 
-int* cloneCoordinate(int* coordinate)
+PElem cloneCoordinate(PElem elem)
 {
+    int* coordinate = (int*)elem;
     int* newCoordinate;
     newCoordinate = (int*)malloc(sizeof(int));
     if (newCoordinate == NULL)
@@ -98,19 +104,21 @@ int* cloneCoordinate(int* coordinate)
 
     //inserting integers
     *newCoordinate = *coordinate;
-
+    //PElem returnpointer = (PElem) newCoordinate; 
     return newCoordinate;
 }
 
-void destroyCoordinate(int* coordinate)
+void destroyCoordinate(PElem elem)
 {
+    int* coordinate = (int*)elem;
     free(coordinate);
 }
 
 /*-------------------------------functions for Cluster (point list)----------------------*/
 
-PPoint ClonePoint(PPoint point)
+PElem ClonePoint(PElem elem)
 {
+    PPoint point = (PPoint)elem;
     int Cord;
 
     PPoint newPoint = PointCreate(point->dim_num);
@@ -125,10 +133,13 @@ PPoint ClonePoint(PPoint point)
         if (Cord != 10000)
             PointAddCoordinate(newPoint, Cord);
     }
+    //PElem casting
     return newPoint;
 }
-BOOL ComparePoints(PPoint point1, PPoint point2)
+BOOL ComparePoints(PElem elem1, PElem elem2)
 {
+    PPoint point1 = (PPoint)elem1;
+    PPoint point2 = (PPoint)elem2;
     if ((point1->dim_num != point2->dim_num) || (point1->cur_dim_num != point2->cur_dim_num))
         return  FALSE;
     if (ListCompare(point1->coordinateList, point2->coordinateList))
@@ -156,19 +167,15 @@ int GetPointsDis(PPoint point1, PPoint point2)
 {
     if (point1->dim_num != point2->dim_num)
         return -1;
-    int* dis;
-    dis = (int*)malloc(sizeof(int));
-    if (dis == NULL)
-        return NULL;
-    *dis = 0;
+    int dis = 0;
     int *Cod1 = ListGetFirst(point1->coordinateList);
     int *Cod2 = ListGetFirst(point2->coordinateList);
 
     while(Cod1)
     {
-        *dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + *dis;
+        dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
         Cod1 = ListGetNext(point1->coordinateList);
         Cod2 = ListGetNext(point2->coordinateList);
     }
-    return *dis;
+    return dis;
 }
