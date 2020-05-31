@@ -65,20 +65,20 @@ int ClusterGetMinDistance(PCluster cluster, PPoint point)
     if (curPoint == NULL)// there arent any points to compare with yet
         return 10000;
     int curmindis = cluster->minDistance;
-    int* MinDis;
+    int MinDis;
     MinDis = (int*)malloc(sizeof(int));
     while (curPoint)
     {
-        *MinDis = GetPointsDis(point, curPoint);
+        MinDis = GetPointsDis(point, curPoint);
         if ((cluster->minDistance) == 10000) // for the first point inside
-            return *MinDis;
-        if (*MinDis < curmindis) // updateing min sum
-            curmindis = *MinDis;
+            return MinDis;
+        if (MinDis < curmindis) // updateing min sum
+            curmindis = MinDis;
         curPoint = ListGetNext(cluster->pointList);
 
     }
-    *MinDis = curmindis;
-    return *MinDis;
+    MinDis = curmindis;
+    return MinDis;
 }
 
 void ClusterPrint(PCluster cluster)

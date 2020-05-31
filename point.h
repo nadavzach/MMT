@@ -11,7 +11,6 @@ int PointGetNextCoordinate(PPoint point);
 int PointGetFirstCoordinate(PPoint point);
 void PointPrint(PElem elem);
 int PointGetDim(PPoint point);
-int PointGetCurDim(PPoint point);
 int GetPointsDis(PPoint point1, PPoint point2);
 
 /*----------------Interface functions-----------------------------*/

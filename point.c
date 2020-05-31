@@ -179,25 +179,17 @@ int PointGetDim(PPoint point)
         return point->dim_num;
 }
 
-int PointGetCurDim(PPoint point)
-{
-    if (!point)
-        return 0;
-    else
-        return point->cur_dim_num;
-}
-
 int GetPointsDis(PPoint point1, PPoint point2)
 {
     if(!point1 || !point2)
-        return 0;//$$what should we return here?
+        return 0;//$$what should we return here?maybe 10000?
     if (point1->dim_num != point2->dim_num)
         return -1;
     int dis = 0;
     int *Cod1 = ListGetFirst(point1->coordinateList);
     int *Cod2 = ListGetFirst(point2->coordinateList);
-
-    while(Cod1)
+    int pointDim = point1->dim_num;
+    for(int i = 0; i <= pointDim; i++)//we can assume that all points are full with their cords'.(from forum)
     {
         dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
         Cod1 = ListGetNext(point1->coordinateList);
