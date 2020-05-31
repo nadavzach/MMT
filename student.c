@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "list.h"
 #include "student.h"
 #include <stdio.h>
@@ -23,68 +24,71 @@ PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
     new_student->ID = ID;
 
     //mallocing and cpying strings
-    if(NULL==(new_student->faculty = (char*)malloc(sizeof(strlen(faculty)+1)))) {
+    if (NULL == (new_student->faculty = (char*)malloc(sizeof(strlen(faculty) + 1)))) {
         free(new_student);
         return NULL;
     }
-    strcpy(new_student->faculty , faculty);
+    strcpy(new_student->faculty, faculty);
 
-    if(NULL==(new_student->name = (char*)malloc(sizeof(strlen(Name)+1))))
+    if (NULL == (new_student->name = (char*)malloc(sizeof(strlen(Name) + 1))))
     {
         free(new_student->faculty);
         free(new_student);
         return NULL;
     }
-    strcpy(new_student->name , Name);
+    strcpy(new_student->name, Name);
     return new_student;
 }
 
 
-void printStudent(PStudent pstudent)
+void printStudent(PElem elem)
 {
-
-    printf("Name: %s, Age: %d, ID: %d, Faculty: %s \n", pstudent->name,
-           pstudent->age, pstudent->ID, pstudent->faculty);
-
+    PStudent pstudent = (PStudent) elem;
+    printf("Name: %s, Age: %d, ID: %d, Faculty: %s\n", pstudent->name,
+        pstudent->age, pstudent->ID, pstudent->faculty);
 }
 
-BOOL compareStudents(PStudent pstudent1, PStudent pstudent2)
+BOOL compareStudents(PElem elem1, PElem elem2)
 {
+    PStudent pstudent1 = (PStudent)elem1;
+    PStudent pstudent2 = (PStudent)elem2;
     if (pstudent1->ID == pstudent2->ID)
         return true;
     return false;
 }
 
-PStudent cloneStudent(PStudent pstudent)
+PElem cloneStudent(PElem elem)
 {
     PStudent newstudent;
     newstudent = (PStudent)malloc(sizeof(Student));
     if (newstudent == NULL)
         return NULL;
+    PStudent pstudent = (PStudent)elem;
 
     //inserting integers
     newstudent->age = pstudent->age;
     newstudent->ID = pstudent->ID;
 
     //mallocing and copying strings
-    if(NULL==(newstudent->faculty = (char*)malloc(sizeof(strlen(pstudent->faculty)+1)))) {
+    if (NULL == (newstudent->faculty = (char*)malloc(sizeof(strlen(pstudent->faculty) + 1)))) {
         free(newstudent);
         return NULL;
     }
-    strcpy(newstudent->faculty , pstudent->faculty);
+    strcpy(newstudent->faculty, pstudent->faculty);
 
-    if(NULL==(newstudent->name = (char*)malloc(sizeof(strlen(pstudent->name)+1)))) {
+    if (NULL == (newstudent->name = (char*)malloc(sizeof(strlen(pstudent->name) + 1)))) {
         free(newstudent->faculty);
         free(newstudent);
         return NULL;
     }
-    strcpy(newstudent->name , pstudent->name);
+    strcpy(newstudent->name, pstudent->name);
     return newstudent;
 }
 
-void destroyStudent(PStudent pstudent)
+void destroyStudent(PElem elem)
 {
-    free(pstudent->name);
-    free(pstudent->faculty);
+    PStudent pstudent = (PStudent)elem;
+    //free(pstudent->name);
+    //free(pstudent->faculty);
     free(pstudent);
 }

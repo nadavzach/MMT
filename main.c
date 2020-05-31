@@ -18,6 +18,18 @@ int main()
         printf("ListCreate for Student Failed. Exiting.\n");
         exit(-1);
     }
+
+    /*---------command to test point files------------*/
+
+    PPoint test_Point = PointCreate(3);
+    if(!test_Point)
+    {
+        printf("ListCreate for point test Failed. Exiting.\n");
+        exit(-1);
+    }
+
+    /*---------end of test------------*/
+
     while (fgets(Line, MAX_LINE_SIZE, stdin)) {
 
         Command = strtok(Line, delimiters);
@@ -25,6 +37,34 @@ int main()
         if (NULL == Command) {
             continue;
         }
+        /*----------------command to test point files------------*/
+
+
+
+        if (0 == strcmp(Command, "Add_Cord"))
+        {
+            if(test_Point)
+            {
+                char* rec_cord = strtok(NULL, delimiters);
+                PointAddCoordinate(test_Point,atoi(rec_cord));
+            }
+        }
+        if (0 == strcmp(Command, "gf"))
+        {
+            if(test_Point)
+            {
+                printf("%d\n",PointGetFirstCoordinate(test_Point));
+            }
+        }
+        if (0 == strcmp(Command, "gn"))
+        {
+            if(test_Point)
+            {
+                printf("%d\n",PointGetNextCoordinate(test_Point));
+            }
+        }
+
+        /* ---------------end of point test------------------------*/
         if (0 == strcmp(Command, "Add_Student"))
         {
 
@@ -99,6 +139,11 @@ int main()
                 printf("Students:\n");
                 ListPrint(pStudentList);
             }
+            if(test_Point)
+            {
+                printf("point:\n");
+                PointPrint(test_Point);
+            }
             /*if(pCluster)
             {
                 printf("Cluster:\n");
@@ -106,6 +151,16 @@ int main()
             }*/
         }
     } // while(fgets(Line, MAX_LINE_SIZE, stdin))
+
+    /*---------command to test point files------------*/
+
+    if(test_Point)
+    {
+        PointDestroy(test_Point);
+    }
+
+    /*---------end of point test------------*/
+
     if(pStudentList)
     {
         ListDestroy(pStudentList);
@@ -114,6 +169,7 @@ int main()
     {
         ClusterDestroy(pCluster);
     }*/
+
     return 0;
 }
 
