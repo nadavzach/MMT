@@ -31,6 +31,12 @@ void ClusterDestroy(PCluster cluster)
 {
     if(!cluster)
         return;
+    /*PPoint curPoint = ListGetFirst(cluster->pointList);
+    while (curPoint)
+    {
+        PointDestroy(curPoint);
+        curPoint = ListGetNext(cluster->pointList);
+    }*/
     ListDestroy(cluster->pointList);
     free(cluster);
 }
@@ -66,12 +72,9 @@ int ClusterGetMinDistance(PCluster cluster, PPoint point)
         return 10000;
     int curmindis = cluster->minDistance;
     int MinDis;
-    MinDis = (int*)malloc(sizeof(int));
     while (curPoint)
     {
         MinDis = GetPointsDis(point, curPoint);
-        if ((cluster->minDistance) == 10000) // for the first point inside
-            return MinDis;
         if (MinDis < curmindis) // updateing min sum
             curmindis = MinDis;
         curPoint = ListGetNext(cluster->pointList);

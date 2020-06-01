@@ -128,7 +128,9 @@ PElem ListGetFirst(PList List)
         exit(-1);//$$ check if we should exit.
 
     List->Node_Iterator = List->pHead;
-    return List->pHead->element;
+    if(List->pHead)
+        return List->pHead->element;
+    return NULL;
 }
 
 PElem ListGetNext(PList List)

@@ -98,7 +98,7 @@ void destroyStudent(PElem elem)
     if(!elem)
         return;
     PStudent pstudent = (PStudent)elem;
-    //free(pstudent->name);
-    //free(pstudent->faculty);
+    free(pstudent->name);
+    free(pstudent->faculty);
     free(pstudent);
 }

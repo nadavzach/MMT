@@ -35,10 +35,17 @@ void PointDestroy(PElem elem)
     ListDestroy(Point->coordinateList);
     free((Point));
 }
+void PointCordListDestroy(PElem elem) //same as
+{
+    if(!elem)
+        return;
+    PPoint Point = (PPoint)elem;
+    ListDestroy(Point->coordinateList);
+}
 
 Result PointAddCoordinate(PPoint Point, int newCord)
 {
-    if(!Point || !newCord)
+    if(!Point)
         return  FAIL;
     if (Point->cur_dim_num < Point->dim_num)//check if there's less cors than the dimension
     {
@@ -142,20 +149,20 @@ PElem ClonePoint(PElem elem)
         return NULL;
     PPoint point = (PPoint)elem;
     int Cord;
+    int i;
 
     PPoint newPoint = PointCreate(point->dim_num);
 
-    Cord = PointGetFirstCoordinate(point);
-    if (Cord == 10000)//10000 is the return value from getfirst if there's no coordinates
+    if (point->cur_dim_num == 0)//meaning the point is empty.
         return newPoint; //empty point
+    Cord = PointGetFirstCoordinate(point);
     PointAddCoordinate(newPoint, Cord);
-    while (Cord != 10000)
+
+    for(i=2 ; i <= point->cur_dim_num ; i++)
     {
         Cord = PointGetNextCoordinate(point);
-        if (Cord != 10000)
-            PointAddCoordinate(newPoint, Cord);
+        PointAddCoordinate(newPoint, Cord);
     }
-    //PElem casting
     return newPoint;
 }
 BOOL ComparePoints(PElem elem1, PElem elem2)
@@ -189,7 +196,8 @@ int GetPointsDis(PPoint point1, PPoint point2)
     int *Cod1 = ListGetFirst(point1->coordinateList);
     int *Cod2 = ListGetFirst(point2->coordinateList);
     int pointDim = point1->dim_num;
-    for(int i = 0; i <= pointDim; i++)//we can assume that all points are full with their cords'.(from forum)
+    int i;
+    for(i = 0; i < pointDim; i++)//we can assume that all points are full with their cords'.(from forum)
     {
         dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
         Cod1 = ListGetNext(point1->coordinateList);
