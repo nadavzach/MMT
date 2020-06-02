@@ -1,9 +1,7 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdbool.h>
 #include "list.h"
 
@@ -130,7 +128,9 @@ PElem ListGetFirst(PList List)
         exit(-1);//$$ check if we should exit.
 
     List->Node_Iterator = List->pHead;
-    return List->pHead->element;
+    if(List->pHead)
+        return List->pHead->element;
+    return NULL;
 }
 
 PElem ListGetNext(PList List)
@@ -169,6 +169,8 @@ BOOL ListCompare(PList list_1, PList list_2)
 
 void ListPrint(PList List)
 {
+    if(!List)
+        return;
     pNode cur_node = NULL;
 
     printf("[");
@@ -183,8 +185,10 @@ void ListPrint(PList List)
 }
 Result ListisEmpty(PList List)
 {
+    if(!List)
+        return FAIL;
     if (List->pHead == NULL)
         return SUCCESS;
     return FAIL;
-        
+
 }

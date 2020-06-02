@@ -15,6 +15,8 @@ struct Student_ {
 
 PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
 {
+    if(!Name || !faculty) //$$ maybe we should let it create an empty student? )like in the main whem it make a copy with just the ID
+        return NULL;
     PStudent new_student;
     new_student = (PStudent)malloc(sizeof(Student));
     if (new_student == NULL)
@@ -43,22 +45,28 @@ PStudent StudentCreate(char* Name, int Age, int ID, char* faculty)
 
 void printStudent(PElem elem)
 {
+    if(!elem)
+        return;
     PStudent pstudent = (PStudent) elem;
     printf("Name: %s, Age: %d, ID: %d, Faculty: %s\n", pstudent->name,
-        pstudent->age, pstudent->ID, pstudent->faculty);
+           pstudent->age, pstudent->ID, pstudent->faculty);
 }
 
 BOOL compareStudents(PElem elem1, PElem elem2)
 {
+    if(!elem1 || !elem2)
+        return FALSE;
     PStudent pstudent1 = (PStudent)elem1;
     PStudent pstudent2 = (PStudent)elem2;
     if (pstudent1->ID == pstudent2->ID)
-        return true;
-    return false;
+        return TRUE;
+    return FALSE;
 }
 
 PElem cloneStudent(PElem elem)
 {
+    if(!elem)
+        return NULL;
     PStudent newstudent;
     newstudent = (PStudent)malloc(sizeof(Student));
     if (newstudent == NULL)
@@ -87,8 +95,10 @@ PElem cloneStudent(PElem elem)
 
 void destroyStudent(PElem elem)
 {
+    if(!elem)
+        return;
     PStudent pstudent = (PStudent)elem;
-    //free(pstudent->name);
-    //free(pstudent->faculty);
+    free(pstudent->name);
+    free(pstudent->faculty);
     free(pstudent);
 }

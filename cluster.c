@@ -14,6 +14,7 @@ typedef struct Cluster_ {
 
 PCluster ClusterCreate(int newDim)
 {
+    //$$ can newDim be NULL of some kind? what check should we do here?
     PCluster newCluster;
     newCluster = (PCluster)malloc(sizeof(cluster));
     if (newCluster == NULL)
@@ -28,12 +29,16 @@ PCluster ClusterCreate(int newDim)
 
 void ClusterDestroy(PCluster cluster)
 {
+    if(!cluster)
+        return;
     ListDestroy(cluster->pointList);
     free(cluster);
 }
 
 Result ClusterAddPoint(PCluster cluster, PPoint point)
 {
+    if(!cluster || !point)
+        return FAIL;
     if (PointGetDim(point) != cluster->Cluster_dim)
         return FAIL;
     /*-------checking if the point exists---------*/
@@ -48,34 +53,35 @@ Result ClusterAddPoint(PCluster cluster, PPoint point)
         }
         cluster->minDistance = ClusterGetMinDistance(cluster, point);
     }
-    ListAdd(cluster->pointList, ClonePoint(point));
+    ListAdd(cluster->pointList, point);
     return SUCCESS;
 }
 
 int ClusterGetMinDistance(PCluster cluster, PPoint point)
 {
+    if(!cluster || !point)
+        return FAIL;
     PPoint curPoint = ListGetFirst(cluster->pointList);
     if (curPoint == NULL)// there arent any points to compare with yet
         return 10000;
     int curmindis = cluster->minDistance;
-    int* MinDis;
-    MinDis = (int*)malloc(sizeof(int));
+    int MinDis;
     while (curPoint)
     {
-        *MinDis = GetPointsDis(point, curPoint);
-        if ((cluster->minDistance) == 10000) // for the first point inside
-            return *MinDis;
-        if (*MinDis < curmindis) // updateing min sum
-            curmindis = *MinDis;
+        MinDis = GetPointsDis(point, curPoint);
+        if (MinDis < curmindis) // updateing min sum
+            curmindis = MinDis;
         curPoint = ListGetNext(cluster->pointList);
 
     }
-    *MinDis = curmindis;
-    return *MinDis;
+    MinDis = curmindis;
+    return MinDis;
 }
 
 void ClusterPrint(PCluster cluster)
 {
+    if(!cluster)
+        return;
     printf("Cluster's dimension: %d\n", cluster->Cluster_dim);
     ListPrint(cluster->pointList);
     printf("Minimum Square Distance: %d\n", cluster->minDistance);
