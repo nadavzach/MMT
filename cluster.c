@@ -31,12 +31,6 @@ void ClusterDestroy(PCluster cluster)
 {
     if(!cluster)
         return;
-    /*PPoint curPoint = ListGetFirst(cluster->pointList);
-    while (curPoint)
-    {
-        PointDestroy(curPoint);
-        curPoint = ListGetNext(cluster->pointList);
-    }*/
     ListDestroy(cluster->pointList);
     free(cluster);
 }
@@ -59,7 +53,7 @@ Result ClusterAddPoint(PCluster cluster, PPoint point)
         }
         cluster->minDistance = ClusterGetMinDistance(cluster, point);
     }
-    ListAdd(cluster->pointList, ClonePoint(point));
+    ListAdd(cluster->pointList, point);
     return SUCCESS;
 }
 

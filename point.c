@@ -33,7 +33,7 @@ void PointDestroy(PElem elem)
         return;
     PPoint Point = (PPoint)elem;
     ListDestroy(Point->coordinateList);
-    free((Point));
+    free(Point);
 }
 void PointCordListDestroy(PElem elem) //same as
 {
