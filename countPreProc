@@ -1,0 +1,14 @@
+#!/bin/bash
+####################################################################
+# Script name: countPreProc	
+# Description:
+# Parameters: (1) directory name
+# Return value: the amout of lines the preprocessor adds to a .c code
+####################################################################
+
+expr $((gcc -E "$1"/*.c) | wc -l) - $((cat "$1"/*.c) | wc -l)
+
+
+
+
+
