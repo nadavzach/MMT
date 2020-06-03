@@ -13,12 +13,12 @@ typedef struct Point_ {
 
 PPoint PointCreate(int newDim_num)
 {
-    if(!newDim_num)
+    if (!newDim_num)
         return NULL;
     PPoint newPoint;
     newPoint = (PPoint)malloc(sizeof(point));
     if (newPoint == NULL)
-        return NULL;//$$check if that what we should do here
+        return NULL;
     //inserting integers.
     newPoint->dim_num = newDim_num;
     newPoint->cur_dim_num = 0;
@@ -29,7 +29,7 @@ PPoint PointCreate(int newDim_num)
 
 void PointDestroy(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return;
     PPoint Point = (PPoint)elem;
     ListDestroy(Point->coordinateList);
@@ -37,7 +37,7 @@ void PointDestroy(PElem elem)
 }
 void PointCordListDestroy(PElem elem) //same as
 {
-    if(!elem)
+    if (!elem)
         return;
     PPoint Point = (PPoint)elem;
     ListDestroy(Point->coordinateList);
@@ -45,7 +45,7 @@ void PointCordListDestroy(PElem elem) //same as
 
 Result PointAddCoordinate(PPoint Point, int newCord)
 {
-    if(!Point)
+    if (!Point)
         return  FAIL;
     if (Point->cur_dim_num < Point->dim_num)//check if there's less cors than the dimension
     {
@@ -66,10 +66,10 @@ Result PointAddCoordinate(PPoint Point, int newCord)
 
 int PointGetFirstCoordinate(PPoint point)
 {
-    if(!point)
+    if (!point)
         return 0;
     if (point->cur_dim_num == 0)
-        return 0;//$$make sure all funcs calling this func make sure they dont ask for more cords than the point dimension
+        return 0;
     int* retPointer = (int*)ListGetFirst(point->coordinateList);
     if (retPointer)
         return *(retPointer);
@@ -79,7 +79,7 @@ int PointGetFirstCoordinate(PPoint point)
 
 int PointGetNextCoordinate(PPoint point)
 {
-    if(!point)
+    if (!point)
         return 0;
     int* retPointer = (int*)ListGetNext(point->coordinateList);
     if (retPointer)
@@ -89,7 +89,7 @@ int PointGetNextCoordinate(PPoint point)
 
 void PointPrint(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return;
     PPoint point = (PPoint)elem;
     printf("Point Dimension: %d, Size: %d, Coordinates: ", point->dim_num, point->cur_dim_num);
@@ -99,7 +99,7 @@ void PointPrint(PElem elem)
 /* ----------------------Functions for list ---------------------*/
 void printCoordinate(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return;
     int* coordinate = (int*)elem;
     printf("%d ", *coordinate);
@@ -108,8 +108,8 @@ void printCoordinate(PElem elem)
 
 BOOL compareCoordinates(PElem elem1, PElem elem2)
 {
-    if(!elem1 || !elem2)
-        return FALSE;//$$what should we return here?
+    if (!elem1 || !elem2)
+        return FALSE;
     int* coordinate1 = (int*)elem1;
     int* coordinate2 = (int*)elem2;
     if (*coordinate1 == *coordinate2)
@@ -119,7 +119,7 @@ BOOL compareCoordinates(PElem elem1, PElem elem2)
 
 PElem cloneCoordinate(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return  NULL;
     int* coordinate = (int*)elem;
     int* newCoordinate;
@@ -129,13 +129,12 @@ PElem cloneCoordinate(PElem elem)
 
     //inserting integers
     *newCoordinate = *coordinate;
-    //PElem returnpointer = (PElem) newCoordinate;
     return newCoordinate;
 }
 
 void destroyCoordinate(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return;
     int* coordinate = (int*)elem;
     free(coordinate);
@@ -145,7 +144,7 @@ void destroyCoordinate(PElem elem)
 
 PElem ClonePoint(PElem elem)
 {
-    if(!elem)
+    if (!elem)
         return NULL;
     PPoint point = (PPoint)elem;
     int Cord;
@@ -158,7 +157,7 @@ PElem ClonePoint(PElem elem)
     Cord = PointGetFirstCoordinate(point);
     PointAddCoordinate(newPoint, Cord);
 
-    for(i=2 ; i <= point->cur_dim_num ; i++)
+    for (i = 2; i <= point->cur_dim_num; i++)
     {
         Cord = PointGetNextCoordinate(point);
         PointAddCoordinate(newPoint, Cord);
@@ -167,8 +166,8 @@ PElem ClonePoint(PElem elem)
 }
 BOOL ComparePoints(PElem elem1, PElem elem2)
 {
-    if(!elem1 || !elem2)
-        return FALSE;//$$what should we return here?
+    if (!elem1 || !elem2)
+        return FALSE;
     PPoint point1 = (PPoint)elem1;
     PPoint point2 = (PPoint)elem2;
     if ((point1->dim_num != point2->dim_num) || (point1->cur_dim_num != point2->cur_dim_num))
@@ -188,16 +187,16 @@ int PointGetDim(PPoint point)
 
 int GetPointsDis(PPoint point1, PPoint point2)
 {
-    if(!point1 || !point2)
-        return 0;//$$what should we return here?maybe 10000?
+    if (!point1 || !point2)
+        return 0;
     if (point1->dim_num != point2->dim_num)
         return -1;
     int dis = 0;
-    int *Cod1 = ListGetFirst(point1->coordinateList);
-    int *Cod2 = ListGetFirst(point2->coordinateList);
+    int* Cod1 = ListGetFirst(point1->coordinateList);
+    int* Cod2 = ListGetFirst(point2->coordinateList);
     int pointDim = point1->dim_num;
     int i;
-    for(i = 0; i < pointDim; i++)//we can assume that all points are full with their cords'.(from forum)
+    for (i = 0; i < pointDim; i++)//we can assume that all points are full with their cords'.(from forum)
     {
         dis = ((*Cod1 - *Cod2) * (*Cod1 - *Cod2)) + dis;
         Cod1 = ListGetNext(point1->coordinateList);

@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,7 +30,7 @@ PList ListCreate(CLONE_ELEM pCloneElem, REMOVE_ELEM pRemoveElem, COMPARE_ELEM pC
     pNewlist = (PList)malloc(sizeof(List));
     if (pNewlist == NULL) {
         free(pNewlist);
-        return NULL;//$$we need to check what to do if this happens (maybe exit(-1)??)
+        return NULL;
     }
     //saving pointers to first node
     pNewlist->pHead = NULL;
@@ -125,10 +125,10 @@ Result ListRemove(PList List, PElem elem_to_rem)
 PElem ListGetFirst(PList List)
 {
     if (List == NULL)
-        exit(-1);//$$ check if we should exit.
+        return NULL;
 
     List->Node_Iterator = List->pHead;
-    if(List->pHead)
+    if (List->pHead)
         return List->pHead->element;
     return NULL;
 }
@@ -136,7 +136,7 @@ PElem ListGetFirst(PList List)
 PElem ListGetNext(PList List)
 {
     if (List == NULL)
-        exit(-1);//$$ check if we should exit.
+        return NULL;
 
     if (List->Node_Iterator->next == NULL)	// iterator is in the end of the list.
         return NULL;
@@ -149,7 +149,7 @@ PElem ListGetNext(PList List)
 BOOL ListCompare(PList list_1, PList list_2)
 {
     if (list_1 == NULL || list_2 == NULL)
-        exit(-1);//$$ check what should we do (this ir return false).
+        return false;
 
     pNode cur_node_1 = list_1->pHead;
     pNode cur_node_2 = list_2->pHead;
@@ -169,7 +169,7 @@ BOOL ListCompare(PList list_1, PList list_2)
 
 void ListPrint(PList List)
 {
-    if(!List)
+    if (!List)
         return;
     pNode cur_node = NULL;
 
@@ -185,7 +185,7 @@ void ListPrint(PList List)
 }
 Result ListisEmpty(PList List)
 {
-    if(!List)
+    if (!List)
         return FAIL;
     if (List->pHead == NULL)
         return SUCCESS;

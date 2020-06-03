@@ -14,11 +14,13 @@ typedef struct Cluster_ {
 
 PCluster ClusterCreate(int newDim)
 {
+    if (newDim <= 0 || newDim == NULL)
+        return NULL;
     //$$ can newDim be NULL of some kind? what check should we do here?
     PCluster newCluster;
     newCluster = (PCluster)malloc(sizeof(cluster));
     if (newCluster == NULL)
-        return NULL;//$$check if that what we should do here
+        return NULL;
     //inserting integers.
     newCluster->Cluster_dim = newDim;
     newCluster->pointList = ListCreate(ClonePoint, PointDestroy, ComparePoints, PointPrint);
@@ -29,7 +31,7 @@ PCluster ClusterCreate(int newDim)
 
 void ClusterDestroy(PCluster cluster)
 {
-    if(!cluster)
+    if (!cluster)
         return;
     ListDestroy(cluster->pointList);
     free(cluster);
@@ -37,7 +39,7 @@ void ClusterDestroy(PCluster cluster)
 
 Result ClusterAddPoint(PCluster cluster, PPoint point)
 {
-    if(!cluster || !point)
+    if (!cluster || !point)
         return FAIL;
     if (PointGetDim(point) != cluster->Cluster_dim)
         return FAIL;
@@ -59,7 +61,7 @@ Result ClusterAddPoint(PCluster cluster, PPoint point)
 
 int ClusterGetMinDistance(PCluster cluster, PPoint point)
 {
-    if(!cluster || !point)
+    if (!cluster || !point)
         return FAIL;
     PPoint curPoint = ListGetFirst(cluster->pointList);
     if (curPoint == NULL)// there arent any points to compare with yet
@@ -80,7 +82,7 @@ int ClusterGetMinDistance(PCluster cluster, PPoint point)
 
 void ClusterPrint(PCluster cluster)
 {
-    if(!cluster)
+    if (!cluster)
         return;
     printf("Cluster's dimension: %d\n", cluster->Cluster_dim);
     ListPrint(cluster->pointList);
